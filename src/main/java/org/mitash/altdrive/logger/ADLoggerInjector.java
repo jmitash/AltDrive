@@ -51,7 +51,7 @@ public class ADLoggerInjector<T> implements MembersInjector<T> {
      * @param className the name of the class to build the logger for
      * @return a logger with custom formatter, output stream, and name
      */
-    private static Logger buildLogger(String className) {
+    public static Logger buildLogger(String className) {
         Logger logger = Logger.getLogger(className);
         logger.setUseParentHandlers(false);
         PrettyFormatter prettyFormatter = new PrettyFormatter();
