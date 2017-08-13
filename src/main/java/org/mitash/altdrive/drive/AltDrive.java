@@ -1,9 +1,8 @@
 package org.mitash.altdrive.drive;
 
-import com.google.api.services.drive.model.Change;
+import com.google.api.services.drive.model.ChangeList;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * AltDrive interface to represent the remote Drive. The purpose of this interface is to separate the Google Drive
@@ -33,5 +32,5 @@ public interface AltDrive {
      * @param pageToken the token representing the previous state of the drive
      * @return a list of changes that occurred, or null if an error occurred
      */
-    List<Change> getChangeList(String pageToken);
+    ChangeList getChanges(String pageToken);
 }

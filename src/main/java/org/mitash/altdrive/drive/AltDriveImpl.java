@@ -1,15 +1,12 @@
 package org.mitash.altdrive.drive;
 
 import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.model.Change;
 import com.google.api.services.drive.model.ChangeList;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.mitash.altdrive.logger.ADLogger;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,11 +45,11 @@ public class AltDriveImpl implements AltDrive {
     }
 
     @Override
-    public List<Change> getChangeList(String pageToken) {
+    public ChangeList getChanges(String pageToken) {
         try {
             ChangeList changeList = drive.changes().list(pageToken).execute();
             logger.fine("Fetched Drive change list");
-            return changeList.getChanges();
+            return changeList;
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Could not get the change list", e);
             //TODO: publish failure
