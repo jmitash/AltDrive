@@ -4,7 +4,7 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = 'org.mitash.altdrive.AltDrive'
+mainClassName = 'org.mitash.altdrive.AltDriveApplication'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 version = '1.0'

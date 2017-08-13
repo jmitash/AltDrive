@@ -1,4 +1,4 @@
-package org.mitash.altdrive;
+package org.mitash.altdrive.drive;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -12,20 +12,28 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
+import org.mitash.altdrive.AltDriveApplication;
+import org.mitash.altdrive.logger.ADLogger;
 
+import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
+ * Builds a new Drive instance and authorizes it
  * @author jacob
  */
-public class DriveFactory {
+@Singleton
+class GoogleDriveBuilder {
+
     /** Application name. */
     private static final String APPLICATION_NAME =
-            AltDrive.APPLICATION_NAME;
+            AltDriveApplication.APPLICATION_NAME;
 
     /** Directory to store user credentials for this application. */
     private static final java.io.File DATA_STORE_DIR = new java.io.File(
@@ -49,14 +57,30 @@ public class DriveFactory {
     private static final List<String> SCOPES =
             Collections.singletonList(DriveScopes.DRIVE);
 
+    @ADLogger
+    private Logger logger;
+
     static {
         try {
             HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
-        } catch (Throwable t) {
-            t.printStackTrace();
+        } catch (IOException | GeneralSecurityException e) {
+            e.printStackTrace();
             System.exit(1);
         }
+    }
+
+
+    /**
+     * Builds a new <code>Drive</code> and authorizes it
+     * @return Google Drive
+     * @throws IOException if authorization fails from IO exception
+     */
+    Drive build() throws IOException {
+        return new Drive.Builder(
+                HTTP_TRANSPORT, JSON_FACTORY, authorize())
+                .setApplicationName(APPLICATION_NAME)
+                .build();
     }
 
     /**
@@ -67,7 +91,7 @@ public class DriveFactory {
     private Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                AltDrive.class.getResourceAsStream("/client_secret.json");
+                AltDriveApplication.class.getResourceAsStream("/client_secret.json");
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -80,21 +104,8 @@ public class DriveFactory {
                         .build();
         Credential credential = new AuthorizationCodeInstalledApp(
                 flow, new LocalServerReceiver()).authorize("user");
-        System.out.println(
+        logger.info(
                 "Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
         return credential;
-    }
-
-    /**
-     * Build and return an authorized Drive client service.
-     * @return an authorized Drive client service
-     * @throws IOException a file or networking exception
-     */
-    public Drive getDriveService() throws IOException {
-        Credential credential = authorize();
-        return new Drive.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, credential)
-                .setApplicationName(APPLICATION_NAME)
-                .build();
     }
 }
