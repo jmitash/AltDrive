@@ -8,6 +8,7 @@ import org.mitash.altdrive.logger.ADLoggerInjector;
 import java.util.logging.Logger;
 
 /**
+ * Waits for changes in the remote Drive and fires events when they occur.
  * @author jacob
  */
 public class RemoteWatcherThread extends Thread {
@@ -17,7 +18,7 @@ public class RemoteWatcherThread extends Thread {
     private final AltDrive altDrive;
 
     /**
-     * Initializes the thread as a daemon and set name
+     * Initializes the thread as a daemon and sets the thread name.
      * @param altDrive the Drive to watch
      */
     RemoteWatcherThread(AltDrive altDrive) {
@@ -28,7 +29,7 @@ public class RemoteWatcherThread extends Thread {
     }
 
     /**
-     * Starts polling the Drive for changes
+     * Starts polling the Drive for changes.
      */
     @Override
     public void run() {
