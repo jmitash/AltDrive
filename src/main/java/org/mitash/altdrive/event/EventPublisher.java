@@ -15,11 +15,11 @@ public interface EventPublisher {
      * Adds a new listener to listen for events.
      * @param listener the listener that should be notified of events
      */
-    void addListener(Listener<Event> listener);
+    void addListener(Listener listener);
 
     /**
      * Stops publishing an event to a listener.
      * @param listener the listener to stop listening
      */
-    void removeListener(Listener<Event> listener);
+    void removeListener(Listener listener);
 }

@@ -1,29 +1,20 @@
 package org.mitash.altdrive.event;
 
-import java.lang.reflect.ParameterizedType;
-
 /**
- * Represents an application listener that listens for {@link Event} of type <code>T</code>.
+ * Represents an application listener that listens for an {@link Event} type.
  * @author jacob
  */
-public interface Listener<T extends Event> {
+public interface Listener {
 
     /**
      * Handle the event occurring.
      * @param event the event that occurred
      */
-    void eventOccurred(T event);
+    void eventOccurred(Event event);
 
     /**
-     * Gets the class of the event the listener was generated with.
+     * Tells if the listener can handle the event.
      * @return class of the event
      */
-    default Class<?> getEventClass() {
-        try {
-            String className = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0].getTypeName();
-            return Class.forName(className);
-        } catch (Exception e) {
-            throw new IllegalStateException("Class is not parametrized with generic type!!! Please use extends <> ");
-        }
-    }
+    boolean canHandleEvent(Event event);
 }
