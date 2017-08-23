@@ -48,7 +48,7 @@ public class AltDriveImpl implements AltDrive {
     public ChangeList getChanges(String pageToken) {
         try {
             ChangeList changeList = drive.changes().list(pageToken).execute();
-            logger.fine("Fetched Drive change list");
+            logger.finer("Fetched Drive change list");
             return changeList;
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Could not get the change list", e);

@@ -49,7 +49,7 @@ public class RemoteWatcherThread extends Thread {
         }
 
         while (!this.isInterrupted()) {
-            LOGGER.fine("Pulling changes");
+            LOGGER.finer("Pulling changes");
 
             String pageToken = savedStartPageToken;
             while (pageToken != null) {
