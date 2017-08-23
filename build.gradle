@@ -9,6 +9,12 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 version = '1.0'
 
+applicationDefaultJvmArgs = [
+        "-Dlogger.logger.level=ALL",
+        "-Dlogger.console.level=ALL",
+        "-Dlogger.file.level=ALL"
+]
+
 repositories {
     mavenCentral()
 }
