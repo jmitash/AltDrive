@@ -74,6 +74,10 @@ public class RemoteWatcherThread extends Thread {
         }
     }
 
+    /**
+     * Get's the <code>remote.watcher.interval</code> or it's default for the desired polling interval.
+     * @return the polling level
+     */
     private static long getInterval() {
         String interval = System.getProperty("remote.watcher.interval", String.valueOf(DEFAULT_INTERVAL));
         if(interval.equals(previousIntervalString)) {

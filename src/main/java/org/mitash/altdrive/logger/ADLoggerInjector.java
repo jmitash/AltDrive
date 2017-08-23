@@ -78,6 +78,10 @@ public class ADLoggerInjector<T> implements MembersInjector<T> {
         return logger;
     }
 
+    /**
+     * Get's the <code>logger.logger.level</code> or it's default for logging.
+     * @return the logging level
+     */
     private static Level getLoggerLevel() {
         if (loggedLoggerLevelError) {
             //Prevents spamming multiple of the same error
@@ -98,6 +102,10 @@ public class ADLoggerInjector<T> implements MembersInjector<T> {
         return level;
     }
 
+    /**
+     * Get's the <code>logger.console.level</code> or it's default for console logging.
+     * @return the console logging level
+     */
     private static Level getConsoleLevel() {
         if (loggedConsoleLevelError) {
             //Prevents spamming multiple of the same error
@@ -117,6 +125,10 @@ public class ADLoggerInjector<T> implements MembersInjector<T> {
         return level;
     }
 
+    /**
+     * Get's the <code>logger.file.level</code> or it's default for file logging.
+     * @return the file logging level
+     */
     private static Level getFileLevel() {
         if (loggedFileLevelError) {
             //Prevents spamming multiple of the same error
