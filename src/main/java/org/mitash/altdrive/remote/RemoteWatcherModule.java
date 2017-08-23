@@ -2,6 +2,7 @@ package org.mitash.altdrive.remote;
 
 import com.google.inject.AbstractModule;
 import org.mitash.altdrive.drive.DriveModule;
+import org.mitash.altdrive.event.EventModule;
 import org.mitash.altdrive.logger.LoggerModule;
 
 /**
@@ -14,6 +15,7 @@ public class RemoteWatcherModule extends AbstractModule {
     protected void configure() {
         install(new LoggerModule());
         install(new DriveModule());
+        install(new EventModule());
         bind(RemoteWatcher.class).to(RemoteWatcherImpl.class);
     }
 }

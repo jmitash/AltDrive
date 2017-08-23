@@ -2,6 +2,7 @@ package org.mitash.altdrive.remote;
 
 /**
  * <code>RemoteWatcher</code> is used for watching the remote Drive.
+ *
  * @author jacob
  */
 public interface RemoteWatcher {
@@ -11,4 +12,8 @@ public interface RemoteWatcher {
      */
     void startWatching();
 
+    /**
+     * Stops the {@link RemoteWatcherThread} listening for changes.
+     */
+    void stopWatching();
 }
