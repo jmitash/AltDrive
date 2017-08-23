@@ -52,7 +52,7 @@ public class RemoteWatcherThread extends Thread {
                 for (Change change : changes.getChanges()) {
                     LOGGER.finer("Received change: " + change.toString());
                     RemoteChangeEvent event = new RemoteChangeEvent(change.getFileId());
-                    eventPublisher.publishEvent(event);
+                    eventPublisher.queueEvent(event);
                 }
                 if (changes.getNewStartPageToken() != null) {
                     // Last page, save token for next poll

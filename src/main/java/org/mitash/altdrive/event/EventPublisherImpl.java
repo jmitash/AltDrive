@@ -4,7 +4,11 @@ import org.mitash.altdrive.logger.ADLogger;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -16,15 +20,33 @@ public class EventPublisherImpl implements EventPublisher {
     @ADLogger
     private Logger logger;
 
-    private List<Listener> allListeners = new ArrayList<>();
+    private List<Listener> allListeners = Collections.synchronizedList(new ArrayList<>());
+
+    private BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<>();
 
     @Override
     public void publishEvent(Event event) {
         logger.finer("Publishing event: " + event.toString());
-        allListeners.stream().filter(listener -> listener.canHandleEvent(event)).forEach(listener -> {
+        allListeners.stream()
+                .filter(listener -> listener.canHandleEvent(event))
+                .forEach(listener -> {
             logger.finest("To: " + listener.toString());
             listener.eventOccurred(event);
         });
+    }
+
+    @Override
+    public void queueEvent(Event event) {
+        try {
+            eventQueue.put(event);
+        } catch (InterruptedException e) {
+            logger.log(Level.WARNING, "Interrupted while trying to queue event", e);
+        }
+    }
+
+    @Override
+    public Event dequeueEvent() throws InterruptedException {
+        return eventQueue.take();
     }
 
     @Override
