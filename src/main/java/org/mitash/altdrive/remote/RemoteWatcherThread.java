@@ -6,6 +6,7 @@ import org.mitash.altdrive.drive.AltDrive;
 import org.mitash.altdrive.event.EventPublisher;
 import org.mitash.altdrive.logger.ADLoggerInjector;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -18,6 +19,10 @@ public class RemoteWatcherThread extends Thread {
 
     private final AltDrive altDrive;
     private final EventPublisher eventPublisher;
+
+    private final static long DEFAULT_INTERVAL = 5000;
+    private static String previousIntervalString = String.valueOf(DEFAULT_INTERVAL);
+    private static long previousInterval = DEFAULT_INTERVAL;
 
     /**
      * Initializes the thread as a daemon and sets the thread name.
@@ -62,11 +67,31 @@ public class RemoteWatcherThread extends Thread {
             }
 
             try {
-                sleep(5000);
-                //TODO: system property
+                sleep(getInterval());
             } catch (InterruptedException e) {
                 return;
             }
         }
+    }
+
+    private static long getInterval() {
+        String interval = System.getProperty("remote.watcher.interval", String.valueOf(DEFAULT_INTERVAL));
+        if(interval.equals(previousIntervalString)) {
+            return previousInterval;
+        }
+
+        //Otherwise we need to process the new value
+        long newInterval;
+        try {
+            newInterval = Long.valueOf(interval);
+        } catch (NumberFormatException e) {
+            LOGGER.log(Level.WARNING, "Could not parse Remote Watcher Interval", e);
+            LOGGER.warning("Using default interval: " + DEFAULT_INTERVAL);
+            newInterval = DEFAULT_INTERVAL;
+        }
+
+        previousIntervalString = interval;
+        previousInterval = newInterval;
+        return newInterval;
     }
 }
