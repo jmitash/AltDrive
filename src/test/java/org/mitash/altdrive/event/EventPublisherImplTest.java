@@ -48,6 +48,28 @@ public class EventPublisherImplTest extends TestHelper {
         assertNull(listener.receivedEvent);
     }
 
+    @Test
+    public void queueAndDequeue() {
+        EventPublisher eventPublisher = getEventPublisher();
+
+        Event event = new TestEvent();
+
+        TestThread thread = new TestThread(eventPublisher);
+
+        thread.start();
+
+        eventPublisher.queueEvent(event);
+        try {
+            thread.join(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail(e.toString());
+        }
+        assertFalse("The thread timed out while dequeueing", thread.isAlive());
+
+        assertEquals(thread.dequeueEvent, event);
+    }
+
     private EventPublisherImpl getEventPublisher() {
         EventPublisherImpl eventPublisher = new EventPublisherImpl();
         injectLogger(eventPublisher);
@@ -69,6 +91,24 @@ public class EventPublisherImplTest extends TestHelper {
         @Override
         public boolean canHandleEvent(Event event) {
             return event.getClass().equals(TestEvent.class);
+        }
+    }
+
+    private class TestThread extends Thread {
+        private final EventPublisher eventPublisher;
+        private Event dequeueEvent;
+
+        TestThread(EventPublisher eventPublisher) {
+            this.eventPublisher = eventPublisher;
+        }
+
+        @Override
+        public void run() {
+            try {
+                dequeueEvent = eventPublisher.dequeueEvent();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
