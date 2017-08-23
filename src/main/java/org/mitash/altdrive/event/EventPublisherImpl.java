@@ -1,5 +1,6 @@
 package org.mitash.altdrive.event;
 
+import com.google.inject.Singleton;
 import org.mitash.altdrive.logger.ADLogger;
 
 import java.security.InvalidParameterException;
@@ -15,6 +16,7 @@ import java.util.logging.Logger;
  * Default implementation of {@link EventPublisher}.
  * @author jacob
  */
+@Singleton
 public class EventPublisherImpl implements EventPublisher {
 
     @ADLogger
@@ -39,6 +41,7 @@ public class EventPublisherImpl implements EventPublisher {
     public void queueEvent(Event event) {
         try {
             eventQueue.put(event);
+            logger.finer("Event queued: " + event);
         } catch (InterruptedException e) {
             logger.log(Level.WARNING, "Interrupted while trying to queue event", e);
         }

@@ -1,6 +1,7 @@
 package org.mitash.altdrive.remote;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.mitash.altdrive.drive.AltDrive;
 import org.mitash.altdrive.event.EventPublisher;
 import org.mitash.altdrive.logger.ADLogger;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
  * Default implementation of {@link RemoteWatcher}.
  * @author jacob
  */
+@Singleton
 public class RemoteWatcherImpl implements RemoteWatcher {
 
     @ADLogger
