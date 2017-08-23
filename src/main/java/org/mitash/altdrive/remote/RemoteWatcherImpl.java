@@ -26,6 +26,7 @@ public class RemoteWatcherImpl implements RemoteWatcher {
     /**
      * Sets the <code>AltDrive</code> to be watched.
      * @param altDrive the <code>AltDrive</code> to watch
+     * @param eventPublisher the event publisher to send events
      */
     @Inject
     public RemoteWatcherImpl(AltDrive altDrive, EventPublisher eventPublisher) {

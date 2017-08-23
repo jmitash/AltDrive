@@ -22,6 +22,7 @@ public interface EventPublisher {
 
     /**
      * Dequeue an event to be published on the main thread. Blocks if no event is available.
+     * @throws InterruptedException thrown when interrupted while waiting for event.
      * @return the event to dequeue and publish
      */
     Event dequeueEvent() throws InterruptedException;

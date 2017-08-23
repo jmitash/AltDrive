@@ -14,6 +14,7 @@ public interface Listener {
 
     /**
      * Tells if the listener can handle the event.
+     * @param event the event to potentially handle
      * @return class of the event
      */
     boolean canHandleEvent(Event event);
