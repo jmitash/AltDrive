@@ -3,37 +3,40 @@ package org.mitash.altdrive.remote;
 import org.mitash.altdrive.drive.AltChange;
 import org.mitash.altdrive.drive.AltChangeList;
 import org.mitash.altdrive.drive.AltDrive;
+import org.mitash.altdrive.event.Event;
 import org.mitash.altdrive.event.EventPublisher;
+import org.mitash.altdrive.event.Listener;
 import org.mitash.altdrive.logger.ADLoggerInjector;
+import org.mitash.altdrive.properties.PropertyChangedEvent;
 
-import java.util.logging.Level;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
 /**
  * Waits for changes in the remote Drive and fires events when they occur.
  * @author jacob
  */
-public class RemoteWatcherThread extends Thread {
+public class RemoteWatcherThread extends Thread implements Listener {
 
     private final static Logger LOGGER = ADLoggerInjector.buildLogger(RemoteWatcherThread.class.getName());
 
     private final AltDrive altDrive;
     private final EventPublisher eventPublisher;
 
-    private final static long DEFAULT_INTERVAL = 5000;
-    private static String previousIntervalString = String.valueOf(DEFAULT_INTERVAL);
-    private static long previousInterval = DEFAULT_INTERVAL;
+    private final AtomicLong interval;
 
     /**
      * Initializes the thread as a daemon and sets the thread name.
      * @param altDrive the Drive to watch
+     * @param eventPublisher an event publisher
      */
-    RemoteWatcherThread(AltDrive altDrive, EventPublisher eventPublisher) {
+    RemoteWatcherThread(AltDrive altDrive, EventPublisher eventPublisher, long initialInterval) {
         super("RemoteWatcher");
         this.setDaemon(true);
 
         this.altDrive = altDrive;
         this.eventPublisher = eventPublisher;
+        this.interval = new AtomicLong(initialInterval);
     }
 
     /**
@@ -67,7 +70,7 @@ public class RemoteWatcherThread extends Thread {
             }
 
             try {
-                sleep(getInterval());
+                sleep(interval.get());
             } catch (InterruptedException e) {
                 return;
             }
@@ -75,27 +78,21 @@ public class RemoteWatcherThread extends Thread {
     }
 
     /**
-     * Get's the <code>remote.watcher.interval</code> or it's default for the desired polling interval.
-     * @return the polling level
+     * Reassigns the interval to the new value
+     * @param event the event that occurred
      */
-    private static long getInterval() {
-        String interval = System.getProperty("remote.watcher.interval", String.valueOf(DEFAULT_INTERVAL));
-        if(interval.equals(previousIntervalString)) {
-            return previousInterval;
-        }
+    @Override
+    public void eventOccurred(Event event) {
+        interval.set((long) ((PropertyChangedEvent) event).getNewValue());
+    }
 
-        //Otherwise we need to process the new value
-        long newInterval;
-        try {
-            newInterval = Long.valueOf(interval);
-        } catch (NumberFormatException e) {
-            LOGGER.log(Level.WARNING, "Could not parse Remote Watcher Interval", e);
-            LOGGER.warning("Using default interval: " + DEFAULT_INTERVAL);
-            newInterval = DEFAULT_INTERVAL;
-        }
-
-        previousIntervalString = interval;
-        previousInterval = newInterval;
-        return newInterval;
+    /**
+     * Tells if the event is the interval property change event
+     * @param event the event to potentially handle
+     * @return true if the event is a <code>PropertyChangedEvent</code> and is the interval property
+     */
+    @Override
+    public boolean canHandleEvent(Event event) {
+        return event instanceof PropertyChangedEvent && ((PropertyChangedEvent) event).getProperty().equals("remote.watcher.interval");
     }
 }

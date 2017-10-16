@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import org.mitash.altdrive.drive.DriveModule;
 import org.mitash.altdrive.event.EventModule;
 import org.mitash.altdrive.logger.LoggerModule;
+import org.mitash.altdrive.properties.PropertiesModule;
 
 /**
  * This module binds the necessary resources for remote watching.
@@ -13,6 +14,7 @@ public class RemoteWatcherModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        install(new PropertiesModule());
         install(new LoggerModule());
         install(new DriveModule());
         install(new EventModule());

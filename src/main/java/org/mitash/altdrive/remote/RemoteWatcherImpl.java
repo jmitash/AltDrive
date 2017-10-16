@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import org.mitash.altdrive.drive.AltDrive;
 import org.mitash.altdrive.event.EventPublisher;
 import org.mitash.altdrive.logger.ADLogger;
+import org.mitash.altdrive.properties.PropertyManager;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,20 +24,24 @@ public class RemoteWatcherImpl implements RemoteWatcher {
     private final EventPublisher eventPublisher;
     private RemoteWatcherThread watcherThread;
 
+    private final long defaultInterval;
+
     /**
      * Sets the <code>AltDrive</code> to be watched.
      * @param altDrive the <code>AltDrive</code> to watch
+     * @param propertyManager the application's property manager
      * @param eventPublisher the event publisher to send events
      */
     @Inject
-    public RemoteWatcherImpl(AltDrive altDrive, EventPublisher eventPublisher) {
+    public RemoteWatcherImpl(AltDrive altDrive, PropertyManager propertyManager, EventPublisher eventPublisher) {
         this.altDrive = altDrive;
         this.eventPublisher = eventPublisher;
+        this.defaultInterval = propertyManager.getPropertyAsLong("remote.watcher.interval");
     }
 
     @Override
     public void startWatching() {
-        this.watcherThread = new RemoteWatcherThread(altDrive, eventPublisher);
+        this.watcherThread = new RemoteWatcherThread(altDrive, eventPublisher, defaultInterval);
         this.watcherThread.start();
     }
 
