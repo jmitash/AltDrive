@@ -1,7 +1,7 @@
 package org.mitash.altdrive.remote;
 
-import com.google.api.services.drive.model.Change;
-import com.google.api.services.drive.model.ChangeList;
+import org.mitash.altdrive.drive.AltChange;
+import org.mitash.altdrive.drive.AltChangeList;
 import org.mitash.altdrive.drive.AltDrive;
 import org.mitash.altdrive.event.EventPublisher;
 import org.mitash.altdrive.logger.ADLoggerInjector;
@@ -53,8 +53,8 @@ public class RemoteWatcherThread extends Thread {
 
             String pageToken = savedStartPageToken;
             while (pageToken != null) {
-                ChangeList changes = altDrive.getChanges(pageToken);
-                for (Change change : changes.getChanges()) {
+                AltChangeList changes = altDrive.getChanges(pageToken);
+                for (AltChange change : changes.getChanges()) {
                     LOGGER.finer("Received change: " + change.toString());
                     RemoteChangeEvent event = new RemoteChangeEvent(change.getFileId());
                     eventPublisher.queueEvent(event);

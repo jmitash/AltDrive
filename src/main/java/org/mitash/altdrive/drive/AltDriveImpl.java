@@ -45,11 +45,11 @@ public class AltDriveImpl implements AltDrive {
     }
 
     @Override
-    public ChangeList getChanges(String pageToken) {
+    public AltChangeList getChanges(String pageToken) {
         try {
             ChangeList changeList = drive.changes().list(pageToken).execute();
             logger.finer("Fetched Drive change list");
-            return changeList;
+            return new AltChangeListImpl(changeList);
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Could not get the change list", e);
             //TODO: publish failure

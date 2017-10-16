@@ -1,7 +1,5 @@
 package org.mitash.altdrive.drive;
 
-import com.google.api.services.drive.model.ChangeList;
-
 import java.io.IOException;
 
 /**
@@ -32,5 +30,5 @@ public interface AltDrive {
      * @param pageToken the token representing the previous state of the drive
      * @return a list of changes that occurred, or null if an error occurred
      */
-    ChangeList getChanges(String pageToken);
+    AltChangeList getChanges(String pageToken);
 }
