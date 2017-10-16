@@ -1,7 +1,6 @@
 package org.mitash.altdrive.event;
 
 import org.junit.Test;
-import org.mitash.altdrive.test.TestHelper;
 
 import java.security.InvalidParameterException;
 
@@ -10,11 +9,11 @@ import static org.junit.Assert.*;
 /**
  * @author jacob
  */
-public class EventPublisherImplTest extends TestHelper {
+public class EventPublisherImplTest {
 
     @Test
     public void addAndListen() {
-        EventPublisher eventPublisher = getEventPublisher();
+        EventPublisher eventPublisher = new EventPublisherImpl();
 
         Event event = new TestEvent();
         TestListener listener = new TestListener();
@@ -26,7 +25,7 @@ public class EventPublisherImplTest extends TestHelper {
 
     @Test
     public void addAndRemove() {
-        EventPublisher eventPublisher = getEventPublisher();
+        EventPublisher eventPublisher = new EventPublisherImpl();
 
         Event event = new TestEvent();
         TestListener listener = new TestListener();
@@ -50,7 +49,7 @@ public class EventPublisherImplTest extends TestHelper {
 
     @Test
     public void queueAndDequeue() {
-        EventPublisher eventPublisher = getEventPublisher();
+        EventPublisher eventPublisher = new EventPublisherImpl();
 
         Event event = new TestEvent();
 
@@ -68,12 +67,6 @@ public class EventPublisherImplTest extends TestHelper {
         assertFalse("The thread timed out while dequeueing", thread.isAlive());
 
         assertEquals(thread.dequeueEvent, event);
-    }
-
-    private EventPublisherImpl getEventPublisher() {
-        EventPublisherImpl eventPublisher = new EventPublisherImpl();
-        injectLogger(eventPublisher);
-        return eventPublisher;
     }
 
     private class TestEvent extends Event {
