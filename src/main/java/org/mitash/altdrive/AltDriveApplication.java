@@ -7,7 +7,7 @@ import org.mitash.altdrive.drive.DriveModule;
 import org.mitash.altdrive.event.Event;
 import org.mitash.altdrive.event.EventModule;
 import org.mitash.altdrive.event.EventPublisher;
-import org.mitash.altdrive.logger.ADLoggerInjector;
+import org.mitash.altdrive.logger.LoggerFactory;
 import org.mitash.altdrive.remote.RemoteWatcher;
 import org.mitash.altdrive.remote.RemoteWatcherModule;
 
@@ -19,7 +19,7 @@ public class AltDriveApplication {
 
     public static final String APPLICATION_NAME = "AltDrive";
 
-    private final static Logger LOGGER = ADLoggerInjector.buildLogger(AltDriveApplication.class.getName());
+    private final static Logger LOGGER = LoggerFactory.build(AltDriveApplication.class);
 
     private void start() {
         Injector injector = Guice.createInjector(

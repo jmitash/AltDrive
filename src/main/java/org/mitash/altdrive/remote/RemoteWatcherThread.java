@@ -6,7 +6,7 @@ import org.mitash.altdrive.drive.AltDrive;
 import org.mitash.altdrive.event.Event;
 import org.mitash.altdrive.event.EventPublisher;
 import org.mitash.altdrive.event.Listener;
-import org.mitash.altdrive.logger.ADLoggerInjector;
+import org.mitash.altdrive.logger.LoggerFactory;
 import org.mitash.altdrive.properties.PropertyChangedEvent;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class RemoteWatcherThread extends Thread implements Listener {
 
-    private final static Logger LOGGER = ADLoggerInjector.buildLogger(RemoteWatcherThread.class.getName());
+    private final static Logger LOGGER = LoggerFactory.build(RemoteWatcherThread.class);
 
     private final AltDrive altDrive;
     private final EventPublisher eventPublisher;

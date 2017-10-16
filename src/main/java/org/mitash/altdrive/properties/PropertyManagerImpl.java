@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.mitash.altdrive.AltDriveApplication;
 import org.mitash.altdrive.event.EventPublisher;
-import org.mitash.altdrive.logger.ADLogger;
+import org.mitash.altdrive.logger.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,8 +20,7 @@ import java.util.logging.Logger;
 @Singleton
 public class PropertyManagerImpl implements PropertyManager {
 
-    @ADLogger
-    private Logger logger;
+    private final static Logger LOGGER = LoggerFactory.build(PropertyManagerImpl.class);
 
     private final EventPublisher eventPublisher;
 
@@ -38,7 +37,7 @@ public class PropertyManagerImpl implements PropertyManager {
         try {
             properties = objectMapper.readValue(stream, Map.class);
         } catch (IOException | ClassCastException e) {
-            logger.log(Level.SEVERE, "Could not read properties file", e);
+            LOGGER.log(Level.SEVERE, "Could not read properties file", e);
         }
     }
 

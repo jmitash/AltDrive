@@ -13,7 +13,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import org.mitash.altdrive.AltDriveApplication;
-import org.mitash.altdrive.logger.ADLogger;
+import org.mitash.altdrive.logger.LoggerFactory;
 
 import javax.inject.Singleton;
 import java.io.IOException;
@@ -57,8 +57,7 @@ class GoogleDriveBuilder {
     private static final List<String> SCOPES =
             Collections.singletonList(DriveScopes.DRIVE);
 
-    @ADLogger
-    private Logger logger;
+    private final static Logger LOGGER = LoggerFactory.build(GoogleDriveBuilder.class);
 
     static {
         try {
@@ -104,7 +103,7 @@ class GoogleDriveBuilder {
                         .build();
         Credential credential = new AuthorizationCodeInstalledApp(
                 flow, new LocalServerReceiver()).authorize("user");
-        logger.info(
+        LOGGER.info(
                 "Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
         return credential;
     }

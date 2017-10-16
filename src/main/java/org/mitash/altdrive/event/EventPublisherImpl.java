@@ -1,7 +1,7 @@
 package org.mitash.altdrive.event;
 
 import com.google.inject.Singleton;
-import org.mitash.altdrive.logger.ADLogger;
+import org.mitash.altdrive.logger.LoggerFactory;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -19,8 +19,7 @@ import java.util.logging.Logger;
 @Singleton
 public class EventPublisherImpl implements EventPublisher {
 
-    @ADLogger
-    private Logger logger;
+    private final static Logger LOGGER = LoggerFactory.build(EventPublisherImpl.class);
 
     private List<Listener> allListeners = Collections.synchronizedList(new ArrayList<>());
 
@@ -28,11 +27,11 @@ public class EventPublisherImpl implements EventPublisher {
 
     @Override
     public void publishEvent(Event event) {
-        logger.finer("Publishing event: " + event.toString());
+        LOGGER.finer("Publishing event: " + event.toString());
         allListeners.stream()
                 .filter(listener -> listener.canHandleEvent(event))
                 .forEach(listener -> {
-            logger.finest("To: " + listener.toString());
+            LOGGER.finest("To: " + listener.toString());
             listener.eventOccurred(event);
         });
     }
@@ -41,9 +40,9 @@ public class EventPublisherImpl implements EventPublisher {
     public void queueEvent(Event event) {
         try {
             eventQueue.put(event);
-            logger.finer("Event queued: " + event);
+            LOGGER.finer("Event queued: " + event);
         } catch (InterruptedException e) {
-            logger.log(Level.WARNING, "Interrupted while trying to queue event", e);
+            LOGGER.log(Level.WARNING, "Interrupted while trying to queue event", e);
         }
     }
 
@@ -54,13 +53,13 @@ public class EventPublisherImpl implements EventPublisher {
 
     @Override
     public void addListener(Listener listener) {
-        logger.finer("Adding listener: " + listener.toString());
+        LOGGER.finer("Adding listener: " + listener.toString());
         allListeners.add(listener);
     }
 
     @Override
     public void removeListener(Listener listener) {
-        logger.finer("Removing listener: " + listener.toString());
+        LOGGER.finer("Removing listener: " + listener.toString());
         if(!allListeners.remove(listener)) {
             throw new InvalidParameterException("Attempted to remove a listener that isn't tracked");
         }

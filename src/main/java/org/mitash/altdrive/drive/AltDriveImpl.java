@@ -4,7 +4,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.ChangeList;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.mitash.altdrive.logger.ADLogger;
+import org.mitash.altdrive.logger.LoggerFactory;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -17,8 +17,7 @@ import java.util.logging.Logger;
 @Singleton
 public class AltDriveImpl implements AltDrive {
 
-    @ADLogger
-    private Logger logger;
+    private final static Logger LOGGER = LoggerFactory.build(AltDriveImpl.class);
 
     @Inject
     private GoogleDriveBuilder googleDriveBuilder;
@@ -28,17 +27,17 @@ public class AltDriveImpl implements AltDrive {
     @Override
     public void initialize() throws IOException {
         drive = googleDriveBuilder.build();
-        logger.info("Google Drive built");
+        LOGGER.info("Google Drive built");
     }
 
     @Override
     public String getStartPageToken() {
         try {
             String startPageToken = drive.changes().getStartPageToken().execute().getStartPageToken();
-            logger.info("Fetched start page token");
+            LOGGER.info("Fetched start page token");
             return startPageToken;
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Could not get the start page token", e);
+            LOGGER.log(Level.SEVERE, "Could not get the start page token", e);
             //TODO: publish failure
             return ERROR_STRING;
         }
@@ -48,10 +47,10 @@ public class AltDriveImpl implements AltDrive {
     public AltChangeList getChanges(String pageToken) {
         try {
             ChangeList changeList = drive.changes().list(pageToken).execute();
-            logger.finer("Fetched Drive change list");
+            LOGGER.finer("Fetched Drive change list");
             return new AltChangeListImpl(changeList);
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Could not get the change list", e);
+            LOGGER.log(Level.SEVERE, "Could not get the change list", e);
             //TODO: publish failure
             return null;
         }

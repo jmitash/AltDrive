@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.mitash.altdrive.drive.AltDrive;
 import org.mitash.altdrive.event.EventPublisher;
-import org.mitash.altdrive.logger.ADLogger;
+import org.mitash.altdrive.logger.LoggerFactory;
 import org.mitash.altdrive.properties.PropertyManager;
 
 import java.util.logging.Level;
@@ -17,8 +17,7 @@ import java.util.logging.Logger;
 @Singleton
 public class RemoteWatcherImpl implements RemoteWatcher {
 
-    @ADLogger
-    private Logger logger;
+    private final static Logger LOGGER = LoggerFactory.build(RemoteWatcherImpl.class);
 
     private final AltDrive altDrive;
     private final EventPublisher eventPublisher;
@@ -51,7 +50,7 @@ public class RemoteWatcherImpl implements RemoteWatcher {
         try {
             this.watcherThread.join();
         } catch (InterruptedException e) {
-            logger.log(Level.SEVERE, "Interrupted while waiting for watcher thread to shutdown", e);
+            LOGGER.log(Level.SEVERE, "Interrupted while waiting for watcher thread to shutdown", e);
         }
     }
 }
