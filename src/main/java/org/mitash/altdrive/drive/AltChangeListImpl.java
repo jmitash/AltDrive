@@ -30,4 +30,9 @@ public class AltChangeListImpl implements AltChangeList {
     public String getNextPageToken() {
         return changeList.getNextPageToken();
     }
+
+    @Override
+    public String toString() {
+        return getChanges().toString();
+    }
 }

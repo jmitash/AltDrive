@@ -52,7 +52,7 @@ public class RemoteWatcherThread extends Thread implements Listener {
         }
 
         while (!this.isInterrupted() && !AltDrive.ERROR_STRING.equals(savedStartPageToken)) {
-            LOGGER.finer("Pulling changes");
+            LOGGER.finest("Pulling changes");
 
             String pageToken = savedStartPageToken;
             while (pageToken != null) {

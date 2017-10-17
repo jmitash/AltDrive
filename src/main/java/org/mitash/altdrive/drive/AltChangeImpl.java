@@ -23,4 +23,9 @@ public class AltChangeImpl implements AltChange {
     public Boolean isRemoved() {
         return change.getRemoved();
     }
+
+    @Override
+    public String toString() {
+        return change.toString();
+    }
 }

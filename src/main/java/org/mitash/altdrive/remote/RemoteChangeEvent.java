@@ -21,4 +21,9 @@ public class RemoteChangeEvent extends Event {
     public String getFileId() {
         return fileId;
     }
+
+    @Override
+    public String toString() {
+        return String.format("RemoteChangeEvent: {fileId:'%s'}", getFileId());
+    }
 }
