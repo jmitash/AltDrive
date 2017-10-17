@@ -15,9 +15,9 @@ import java.util.logging.Logger;
  * @author jacob
  */
 @Singleton
-public class AltDriveImpl implements AltDrive {
+public class GoogleDrive implements AltDrive {
 
-    private final static Logger LOGGER = LoggerFactory.build(AltDriveImpl.class);
+    private final static Logger LOGGER = LoggerFactory.build(GoogleDrive.class);
 
     @Inject
     private GoogleDriveBuilder googleDriveBuilder;

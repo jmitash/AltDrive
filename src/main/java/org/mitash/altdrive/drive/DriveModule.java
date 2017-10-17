@@ -10,7 +10,7 @@ public class DriveModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(AltDrive.class).to(AltDriveImpl.class);
+        bind(AltDrive.class).to(GoogleDrive.class);
     }
 
 }
